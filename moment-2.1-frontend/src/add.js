@@ -86,6 +86,8 @@ async function sendQuery(event) {
         console.log(data);
 
         document.getElementById("form").reset()
+
+        document.getElementById("success").innerHTML = `Post skapad!`
     }
 
 }

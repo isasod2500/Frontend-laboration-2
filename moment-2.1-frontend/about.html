@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/src/styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
+  <title>Om webbplatsen</title>
+</head>
+
+<body>
+    <header>
+        <ul id="nav">
+            <li>
+                <a href="index.html">Startsida</a>
+            </li>
+            <li>
+                <a href="add.html">Lägg till erfarenhet</a>
+            </li>
+        </ul>
+    </header>
+    <section id="main">
+        <h1>Tekniska specifikationer och slutsatser</h1>
+        <article id="aboutMain">
+            <h2>Det tekniska</h2>
+            <p>
+                Webbplatsen har skapats i tre nivåer. Den nedersta nivån, min MySQL databas, tillhandahålls av Aiven och deras gratistjänst. Med det kan man skapa små databaser som inte tar mycket trafik, utan kostnad.
+                <br><br>Den mellersta lagret är min webservice som körs via Render. Det är skapat med NodeJS och Express. Där har jag med javascript kodat CRUD för att behandla förfrågningar till mitt API. POST, som skapar innehåll, GET som läser innehåll, PUT som uppdaterar och DELETE som raderar innehåll. 
+                <br><br>Det översta lagret, min frontend, är ett vanligt VITE projekt skapat med hjälp av Netlify. Här finns kod som hanterar validering av fält och som gör fetch-anrop till Render (webservice) som i sin tur pratar med Aiven (databasen)
+            </p>
+
+            <h2>Slutsatser</h2>
+            <p>
+                Det gick lättare än vad jag förväntade mig. Jag trodde att detta skulle vara svårare än allt jag gjort hittills, men det var det faktiskt inte. Jag hoppas att det är ett tecken på att jag börjar fatta mer intuitivt hur jag ska göra och lösa problemen. Det var riktigt kul att se en API jag själv skapat läsas och uppdateras, via en webservice via en databas. Det var som att man skapat sin första riktiga, kompletta webbplats. 
+                <br><br>Men det blev såklart lite hårslitande när jag fastnade med omvandling av JSON och hur jag skulle behandla parametrarna i mina fetches.  
+            </p>
+        </article>
+    </section>
+</body>
+
+</html>
