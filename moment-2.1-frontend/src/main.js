@@ -86,7 +86,7 @@ async function fetchData() {
 }
 
 function updatePage(id) {
-  window.jobLocation=`./edit.html?id=${id}`
+  window.location=`./edit.html?id=${id}`
 }
 
 //Funktion för deleteBtn
