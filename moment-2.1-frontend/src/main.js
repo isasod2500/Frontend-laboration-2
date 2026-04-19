@@ -16,7 +16,7 @@ async function fetchData() {
     let id = db.id
     let companyname = db.companyname
     let jobtitle = db.jobtitle
-    let location = db.location
+    let jobLocation = db.jobLocation
     let startdate = db.startdate
     let enddate = db.enddate
     let description = db.description
@@ -30,8 +30,8 @@ async function fetchData() {
       let listHeader = document.createElement("h2")
       listHeader.innerHTML = `${entry.companyname} - ${entry.jobtitle}`
 
-      let listLocation = document.createElement("h3")
-      listLocation.innerHTML = `${entry.location}`
+      let listjobLocation = document.createElement("h3")
+      listjobLocation.innerHTML = `${entry.jobLocation}`
 
       let startDate = entry.startdate.slice(0, 10)
       let endDate = entry.enddate.slice(0, 10)
@@ -51,6 +51,7 @@ async function fetchData() {
       updateBtn.value = entry.id
       updateBtn.textContent = `Ändra post`
 
+
       let deleteBtn = document.createElement("button")
       deleteBtn.setAttribute("class", "deleteBtn")
       deleteBtn.value = entry.id
@@ -60,46 +61,32 @@ async function fetchData() {
       buttonsDiv.appendChild(deleteBtn)
 
       listItem.appendChild(listHeader)
-      listItem.appendChild(listLocation)
+      listItem.appendChild(listjobLocation)
       listItem.appendChild(listDate)
       listItem.appendChild(listDescription)
       listItem.appendChild(buttonsDiv)
       listContainer.appendChild(listItem)
 
-
-      updateBtn.addEventListener("click", updateQuery)
+      console.log(entry)
+      console.log(entry.id)
+      updateBtn.addEventListener("click", () => {
+        updatePage(entry.id)
+      })
       deleteBtn.addEventListener("click", deleteQuery)
 
       
 
     })
     console.log(db)
+
+    
   } catch (error) {
     console.error(`Something went wrong: ${error}`)
   }
 }
 
-async function updateQuery() {
-
-
-
-  try {
-    const putDatabase = await fetch("https://lab2-workexperience.onrender.com/api/workexperience/" + id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(work)
-    });
-
-    const data = await putDatabase.json();
-
-  } catch (err) {
-    console.error(err)
-  }
-
-  console.log(data)
-
+function updatePage(id) {
+  window.jobLocation=`./edit.html?id=${id}`
 }
 
 //Funktion för deleteBtn
@@ -107,7 +94,7 @@ async function deleteQuery() {
   let id = document.querySelector(".deleteBtn").value
   console.log(id)
   try {
-    const deleteDatabase = await fetch("https://lab2-workexperience.onrender.com/api/workexperience/" + id, {
+    const deleteDatabase = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience?id=${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"

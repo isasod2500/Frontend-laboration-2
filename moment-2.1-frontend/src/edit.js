@@ -1,25 +1,43 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", async () => {
+    let sendUpdate = document.getElementById("sendUpdate")
+    sendUpdate.addEventListener("click", updateQuery)
+    let params = new URLSearchParams(document.jobLocation.search)
+    let id = params.get("id");
+    console.log(id)
+    let errors = [];
 
-    document.getElementById("submitBtn").addEventListener("click", sendQuery)
-})
+    try {
+        const getDatabase = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience/${id}`)
+        const db = await getDatabase.json()
 
-//Funktion för POST vid knapptryck
-async function sendQuery(event) {
+        let companyname = db.companyname
+        let jobtitle = db.jobtitle
+        let jobLocation = db.jobLocation
+        let startdate = db.startdate
+        let enddate = db.enddate
+        let description = db.description
+
+        console.log(db)
+
+        document.getElementById("companyname").value = companyname
+        document.getElementById("jobtitle").value = jobtitle
+        document.getElementById("jobLocation").value = jobLocation
+        document.getElementById("startdate").value = startdate.slice(0, 10)
+        document.getElementById("enddate").value = enddate.slice(0, 10)
+        document.getElementById("description").value = description
+
+    } catch (err) {
+        console.log(err)
+    }
+
+
+});
+
+async function updateQuery() {
     //Jag vill inte att sidan laddar om.
     event.preventDefault()
-
-    //Tom error array för felmeddelanden.
-    const errors = [];
-
-    //Skapande av variabler för HTML DOM
-    let companyname = document.getElementById("companyname").value
-    let jobtitle = document.getElementById("jobtitle").value
-    let jobLocation = document.getElementById("jobLocation").value
-    let startdate = document.getElementById("startdate").value
-    let enddate = document.getElementById("enddate").value
-    let description = document.getElementById("description").value
 
     //Skapar objekt för att skicka till APIn
     let work = {
@@ -30,8 +48,9 @@ async function sendQuery(event) {
         enddate: enddate,
         description: description
     }
+    console.log(work)
     //Dubbelkollar i fall det som skrivits redan finns i databasen
-    let result = await fetch("https://lab2-workexperience.onrender.com/api/workexperience/", {
+    let result = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience/`, {
         headers: {
             "Content-Type": "application/json"
         }
@@ -40,18 +59,18 @@ async function sendQuery(event) {
     let dbResult = await result.json()
     //validerare för entries. En anställd kan ha samma roll på samma företag, men inte flera gånger under samma tidsperiod.
     Object.values(dbResult).forEach(entry => {
-        if (companyname === entry.companyname && 
+        if (companyname === entry.companyname &&
             jobtitle === entry.jobtitle &&
             startdate >= entry.startdate &&
             enddate <= entry.enddate
-            ) {
+        ) {
             errors.push(`Angiven befattning finns redan registrerad på arbetsplats - kontrollera även start- och slutdatum`)
 
-            if(companyname === entry.companyname) {
+            if (companyname === entry.companyname) {
                 document.getElementById("companyname").value = ""
             }
 
-            if(jobtitle === entry.jobtitle) {
+            if (jobtitle === entry.jobtitle) {
                 document.getElementById("jobtitle").value = ""
             }
 
@@ -75,8 +94,8 @@ async function sendQuery(event) {
     //I fall inga fel finns, skicka till POST
     if (errors.length === 0) {
 
-        let response = await fetch("https://lab2-workexperience.onrender.com/api/workexperience/", {
-            method: "POST",
+        let response = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience?id=${id}`, {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -89,3 +108,4 @@ async function sendQuery(event) {
     }
 
 }
+
