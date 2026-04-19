@@ -42,8 +42,8 @@ async function sendQuery(event) {
     Object.values(dbResult).forEach(entry => {
         if (companyname === entry.companyname && 
             jobtitle === entry.jobtitle &&
-            startdate > entry.startdate &&
-            enddate < entry.enddate
+            startdate >= entry.startdate &&
+            enddate <= entry.enddate
             ) {
             errors.push(`Angiven befattning finns redan registrerad på arbetsplats - kontrollera även start- och slutdatum`)
 

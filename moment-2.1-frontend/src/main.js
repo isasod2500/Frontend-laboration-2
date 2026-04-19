@@ -1,15 +1,18 @@
 "use strict";
-
+//När DOM är laddat, kör fetchData
 document.addEventListener("DOMContentLoaded", () => {
   fetchData();
+
 })
 
+//async function för fetchData
 async function fetchData() {
 
+  //Kör get.fetch mot APIn och skriv ut det
   try {
     const getDatabase = await fetch("https://lab2-workexperience.onrender.com/api/workexperience")
     const db = await getDatabase.json()
-    console.log(db)
+
     let id = db.id
     let companyname = db.companyname
     let jobtitle = db.jobtitle
@@ -18,7 +21,7 @@ async function fetchData() {
     let enddate = db.enddate
     let description = db.description
 
-
+    //forEach loop för object
     Object.values(db).forEach(entry => {
       let listContainer = document.getElementById("listContainer")
       let listItem = document.createElement("div")
@@ -36,21 +39,87 @@ async function fetchData() {
       listDate.innerHTML = `${startDate} -> ${endDate}`
 
       let listDescription = document.createElement("p")
-      
+
       listDescription.innerHTML = `${entry.description}`
       listDescription.style.fontStyle = "italic"
+
+      let buttonsDiv = document.createElement("div")
+      buttonsDiv.setAttribute("class", "buttonsDiv")
+
+      let updateBtn = document.createElement("button")
+      updateBtn.setAttribute("class", "updateBtn")
+      updateBtn.value = entry.id
+      updateBtn.textContent = `Ändra post`
+
+      let deleteBtn = document.createElement("button")
+      deleteBtn.setAttribute("class", "deleteBtn")
+      deleteBtn.value = entry.id
+      deleteBtn.textContent = `Radera post`
+
+      buttonsDiv.appendChild(updateBtn)
+      buttonsDiv.appendChild(deleteBtn)
 
       listItem.appendChild(listHeader)
       listItem.appendChild(listLocation)
       listItem.appendChild(listDate)
       listItem.appendChild(listDescription)
+      listItem.appendChild(buttonsDiv)
       listContainer.appendChild(listItem)
 
 
-      console.log(entry.id)
-    })
+      updateBtn.addEventListener("click", updateQuery)
+      deleteBtn.addEventListener("click", deleteQuery)
 
+      
+
+    })
+    console.log(db)
   } catch (error) {
     console.error(`Something went wrong: ${error}`)
+  }
+}
+
+async function updateQuery() {
+
+
+
+  try {
+    const putDatabase = await fetch("https://lab2-workexperience.onrender.com/api/workexperience/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(work)
+    });
+
+    const data = await putDatabase.json();
+
+  } catch (err) {
+    console.error(err)
+  }
+
+  console.log(data)
+
+}
+
+//Funktion för deleteBtn
+async function deleteQuery() {
+  let id = document.querySelector(".deleteBtn").value
+  console.log(id)
+  try {
+    const deleteDatabase = await fetch("https://lab2-workexperience.onrender.com/api/workexperience/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+
+    const data = await deleteDatabase.json();
+
+    console.log(data)
+    document.getElementById("listContainer").innerHTML = ""
+    fetchData()
+  } catch (err) {
+    console.error(err)
   }
 }
