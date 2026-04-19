@@ -1,60 +1,112 @@
-import './style.css'
-import javascriptLogo from './assets/javascript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.js'
+"use strict";
+//När DOM är laddat, kör fetchData
+document.addEventListener("DOMContentLoaded", () => {
+  fetchData();
 
-document.querySelector('#app').innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>
-    <img src=${viteLogo} class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.js</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+})
 
-<div class="ticks"></div>
+//async function för fetchData
+async function fetchData() {
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src=${viteLogo} alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-          <img class="button-icon" src="${javascriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+  //Kör get.fetch mot APIn och skriv ut det
+  try {
+    const getDatabase = await fetch("https://lab2-workexperience.onrender.com/api/workexperience")
+    const db = await getDatabase.json()
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+    let id = db.id
+    let companyname = db.companyname
+    let jobtitle = db.jobtitle
+    let jobLocation = db.jobLocation
+    let startdate = db.startdate
+    let enddate = db.enddate
+    let description = db.description
 
-setupCounter(document.querySelector('#counter'))
+    //forEach loop för object
+    Object.values(db).forEach(entry => {
+      let listContainer = document.getElementById("listContainer")
+      let listItem = document.createElement("div")
+      listItem.setAttribute("class", "listItem")
+
+      let listHeader = document.createElement("h2")
+      listHeader.innerHTML = `${entry.companyname} - ${entry.jobtitle}`
+
+      let listjobLocation = document.createElement("h3")
+      listjobLocation.innerHTML = `${entry.jobLocation}`
+
+      let startDate = entry.startdate.slice(0, 10)
+      let endDate = entry.enddate.slice(0, 10)
+      let listDate = document.createElement("h3")
+      listDate.innerHTML = `${startDate} -> ${endDate}`
+
+      let listDescription = document.createElement("p")
+
+      listDescription.innerHTML = `${entry.description}`
+      listDescription.style.fontStyle = "italic"
+
+      let buttonsDiv = document.createElement("div")
+      buttonsDiv.setAttribute("class", "buttonsDiv")
+
+      let updateBtn = document.createElement("button")
+      updateBtn.setAttribute("class", "updateBtn")
+      updateBtn.value = entry.id
+      updateBtn.textContent = `Ändra post`
+
+
+      let deleteBtn = document.createElement("button")
+      deleteBtn.setAttribute("class", "deleteBtn")
+      deleteBtn.value = entry.id
+      deleteBtn.textContent = `Radera post`
+
+      buttonsDiv.appendChild(updateBtn)
+      buttonsDiv.appendChild(deleteBtn)
+
+      listItem.appendChild(listHeader)
+      listItem.appendChild(listjobLocation)
+      listItem.appendChild(listDate)
+      listItem.appendChild(listDescription)
+      listItem.appendChild(buttonsDiv)
+      listContainer.appendChild(listItem)
+
+      console.log(entry)
+      console.log(entry.id)
+      updateBtn.addEventListener("click", () => {
+        updatePage(entry.id)
+      })
+      deleteBtn.addEventListener("click", deleteQuery)
+
+      
+
+    })
+    console.log(db)
+
+    
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`)
+  }
+}
+
+function updatePage(id) {
+  window.jobLocation=`./edit.html?id=${id}`
+}
+
+//Funktion för deleteBtn
+async function deleteQuery() {
+  let id = document.querySelector(".deleteBtn").value
+  console.log(id)
+  try {
+    const deleteDatabase = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience?id=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+
+    const data = await deleteDatabase.json();
+
+    console.log(data)
+    document.getElementById("listContainer").innerHTML = ""
+    fetchData()
+  } catch (err) {
+    console.error(err)
+  }
+}

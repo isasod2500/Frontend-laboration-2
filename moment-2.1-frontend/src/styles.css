@@ -1,0 +1,154 @@
+body {
+    font-family: "Quicksand", sans-serif;
+    background-color: #98baba;
+    color: #242424;
+}
+
+#main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+#nav {
+    display: grid;
+    grid-template-columns: 5fr 5fr;
+    justify-items: center;
+    list-style: none;
+    margin: 2rem 2rem 2rem 2rem;
+    padding-inline-start: 0;
+
+    a {
+        text-decoration: none;
+        color: #242424;
+        background: #a2aef4;
+        border: 1px solid;
+        box-shadow: 5px 10px 18px #888888;
+        margin: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 5px;
+    }
+
+    a:hover {
+        text-decoration: underline;
+        background: #95a5ff
+    }
+
+    a:active {
+        background: #a2aef4;
+    }
+}
+
+#listContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.listItem {
+    border: 2px solid grey;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem 1rem 1rem;
+    width: 50%;
+    margin: 2rem;
+}
+
+.buttonsDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.updateBtn {
+    text-decoration: none;
+    color: #242424;
+    background: #f9f969;
+    border: 1px solid;
+    box-shadow: 5px 10px 18px #888888;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+.updateBtn:hover {
+    text-decoration: underline;
+        background: #d8d859
+}
+.updateBtn:active {
+    background: #f1f162;
+}
+
+.deleteBtn {
+    text-decoration: none;
+    color: #242424;
+    background: #f96969;
+    border: 1px solid;
+    box-shadow: 5px 10px 18px #888888;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+.deleteBtn:hover {
+    text-decoration: underline;
+        background: #c65858
+}
+.deleteBtn:active {
+    background: #f96969;
+}
+
+#errorList {
+    margin: 2rem 2rem 2rem 2rem;
+    padding-inline-start: 0;
+    color: #570000;
+    font-weight: bold;
+    max-width: 50ch;
+}
+
+#form {
+    min-width: 35%;
+    max-width: 50%;
+    margin: 1rem;
+    padding: 1rem;
+    border: lightgoldenrodyellow 2px solid;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    margin-bottom: 1rem;
+    padding: 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    background-color: #61a463;
+    color: white;
+    padding: 14px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    text-decoration: underline;
+    background-color: #4b814d;
+}
+
+input[type=submit]:active {
+    background-color: #74c476;
+}
+
+
+textarea {
+    width: 80%;
+    height: 100px;
+}
