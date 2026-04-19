@@ -94,7 +94,7 @@ async function deleteQuery() {
   let id = document.querySelector(".deleteBtn").value
   console.log(id)
   try {
-    const deleteDatabase = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience?id=${id}`, {
+    const deleteDatabase = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
