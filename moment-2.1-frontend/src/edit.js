@@ -112,7 +112,8 @@ async function updateQuery() {
         let data = await response.json();
         console.log(data);
 
-        // window.location = `./index.html`
+        //Ladda index vid lyckad input
+        window.location = `./index.html`
     }
 
 }
