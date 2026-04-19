@@ -3,10 +3,9 @@
 window.addEventListener("load", async () => {
     let sendUpdate = document.getElementById("sendUpdate")
     sendUpdate.addEventListener("click", updateQuery)
-    let params = new URLSearchParams(document.jobLocation.search)
+
+    let params = new URLSearchParams(document.location.search)
     let id = params.get("id");
-    console.log(id)
-    let errors = [];
 
     try {
         const getDatabase = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience/${id}`)
@@ -32,13 +31,23 @@ window.addEventListener("load", async () => {
         console.log(err)
     }
 
-
 });
 
 async function updateQuery() {
     //Jag vill inte att sidan laddar om.
     event.preventDefault()
 
+    let params = new URLSearchParams(document.location.search)
+    let id = params.get("id");
+
+    let errors = [];
+
+    let companyname = document.getElementById("companyname").value
+    let jobtitle = document.getElementById("jobtitle").value
+    let jobLocation = document.getElementById("jobLocation").value
+    let startdate = document.getElementById("startdate").value
+    let enddate = document.getElementById("enddate").value
+    let description = document.getElementById("description").value
     //Skapar objekt för att skicka till APIn
     let work = {
         companyname: companyname,
@@ -76,7 +85,6 @@ async function updateQuery() {
 
             return;
         }
-        console.log(errors)
 
     })
     //Om errors har fler än ett entry, fyll errorlistan.
@@ -91,10 +99,10 @@ async function updateQuery() {
 
     }
 
-    //I fall inga fel finns, skicka till POST
+    //I fall inga fel finns, skicka till PUT
     if (errors.length === 0) {
 
-        let response = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience?id=${id}`, {
+        let response = await fetch(`https://lab2-workexperience.onrender.com/api/workexperience/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -104,7 +112,7 @@ async function updateQuery() {
         let data = await response.json();
         console.log(data);
 
-        document.getElementById("form").reset()
+        // window.location = `./index.html`
     }
 
 }
