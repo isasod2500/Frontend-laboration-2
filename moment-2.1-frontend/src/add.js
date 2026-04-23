@@ -12,6 +12,10 @@ async function sendQuery(event) {
 
     //Tom error array för felmeddelanden.
     const errors = [];
+    
+    let errorList = document.getElementById("errorList")
+    errors.length = 0
+    errorList.innerHTML = ""
 
     //Skapande av variabler för HTML DOM
     let companyname = document.getElementById("companyname").value
@@ -21,7 +25,30 @@ async function sendQuery(event) {
     let enddate = document.getElementById("enddate").value
     let description = document.getElementById("description").value
 
-    //Skapar objekt för att skicka till APIn
+    if(companyname === "") {
+        errors.push(`Företag måste fyllas i`)
+    }
+
+    if(jobtitle === "") {
+        errors.push(`Befattningsroll måste fyllas i`)
+    }
+
+    if(jobLocation === "") {
+        errors.push(`Arbetsort måste fyllas i`)
+    }
+
+    if(startdate === "") {
+        errors.push(`Startdatum måste fyllas i`)
+    }
+
+    if(enddate === "") {
+        errors.push(`Slutdatum måste fyllas i`)
+    }
+
+    if(description === "") {
+        errors.push(`Rollbeskrivning måste fyllas i`)
+    } else {
+            //Skapar objekt för att skicka till APIn
     let work = {
         companyname: companyname,
         jobtitle: jobtitle,
@@ -30,6 +57,9 @@ async function sendQuery(event) {
         enddate: enddate,
         description: description
     }
+    }
+
+
     //Dubbelkollar i fall det som skrivits redan finns i databasen
     let result = await fetch("https://lab2-workexperience.onrender.com/api/workexperience/", {
         headers: {
@@ -57,12 +87,10 @@ async function sendQuery(event) {
 
             return;
         }
-        console.log(errors)
 
     })
     //Om errors har fler än ett entry, fyll errorlistan.
     if (errors.length > 0) {
-        let errorList = document.getElementById("errorList")
         errors.forEach(error => {
             let errorLine = document.createElement("li")
             errorLine.innerHTML = error
@@ -83,7 +111,6 @@ async function sendQuery(event) {
             body: JSON.stringify(work)
         });
         let data = await response.json();
-        console.log(data);
 
         document.getElementById("form").reset()
 
